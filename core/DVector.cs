@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace g3
 {
@@ -264,8 +265,7 @@ namespace g3
 
         public byte[] GetBytes()
         {
-            Type type = typeof(T);
-            int n = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            int n = Marshal.SizeOf<T>();
             byte[] buffer = new byte[this.Length * n];
             int i = 0;
             int N = Blocks.Count;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace g3
@@ -217,9 +218,9 @@ namespace g3
 
 
         // conversion to/from bytes
-        public static byte[] StructureToByteArray(object obj)
+        public static byte[] StructureToByteArray<T>(T obj) where T : unmanaged
         {
-            int len = Marshal.SizeOf(obj);
+            int len = Marshal.SizeOf<T>();
             byte[] arr = new byte[len];
             IntPtr ptr = Marshal.AllocHGlobal(len);
             Marshal.StructureToPtr(obj, ptr, true);
@@ -228,12 +229,12 @@ namespace g3
             return arr;
         }
 
-        public static void ByteArrayToStructure(byte[] bytearray, ref object obj)
+        public static void ByteArrayToStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]T>(byte[] bytearray, ref T obj) where T : unmanaged
         {
             int len = Marshal.SizeOf(obj);
             IntPtr i = Marshal.AllocHGlobal(len);
             Marshal.Copy(bytearray, 0, i, len);
-            obj = Marshal.PtrToStructure(i, obj.GetType());
+            obj = Marshal.PtrToStructure<T>(i);
             Marshal.FreeHGlobal(i);
         }
 

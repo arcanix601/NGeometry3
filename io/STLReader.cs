@@ -136,7 +136,6 @@ namespace g3
             int tri_size = 50;      // bytes
             IntPtr bufptr = Marshal.AllocHGlobal(tri_size);
             stl_triangle tmp = new stl_triangle();
-            Type tri_type = tmp.GetType();
 
             DVector<short> tri_attribs = new DVector<short>();
 
@@ -147,7 +146,7 @@ namespace g3
                         break;
 
                     Marshal.Copy(tri_bytes, 0, bufptr, tri_size);
-                    stl_triangle tri = (stl_triangle)Marshal.PtrToStructure(bufptr, tri_type);
+                    stl_triangle tri = Marshal.PtrToStructure<stl_triangle>(bufptr);
 
                     append_vertex(tri.ax, tri.ay, tri.az);
                     append_vertex(tri.bx, tri.by, tri.bz);
